@@ -1,8 +1,0 @@
-
-.gitignore
-
-### IntelliJ IDEA ###
-blog/*.idea
-.iws
-blog/*.iml
-.ipr
