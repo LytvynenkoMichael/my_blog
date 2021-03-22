@@ -2,7 +2,7 @@
 .gitignore
 
 ### IntelliJ IDEA ###
-.idea
+blog/*.idea
 .iws
-.iml
+blog/*.iml
 .ipr
