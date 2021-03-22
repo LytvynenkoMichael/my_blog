@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE">Home Page</title>
+
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"
+          rel="stylesheet" media="screen"/>
+
+    <link href="http://fonts.googleapis.com/css?family=Roboto+Condensed|Open+Sans:400,300,700|Yesteryear"
+          rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/style.css}" href="../css/style.css"/>
+</head>
+<body>
+
+<div id="menu-wrapper">
+    <div id="menu">
+        <!-- show My Blog only if user is authenticated -->
+        <!--		<ul class="nav navbar-nav" sec:authorize="hasRole('USER')">-->
+        <li class="active"><a th:href="@{/home}">Home</a></li>        <!--		</ul>-->
+        <!-- show new post only if user is authenticated -->
+        <!--		<ul class="nav navbar-nav" sec:authorize="hasRole('USER')">-->
+        <li class="active"><a th:href="@{/newPost}">New Post</a></li>
+        <!--		</ul>-->
+        <!-- show sign out only if user is authenticated -->
+        <!--		<ul class="nav navbar-nav" sec:authorize="isAuthenticated()">-->
+        <li class="active"><a th:href="@{/logout}">Sign Out</a></li>
+        </ul>
+    </div>
+    <!-- end #menu -->
+</div>
+<div class="container">
+    <!--Post-->
+    <div class="jumbotron">
+        <h2 style="color:black" th:text="${post.title}">Title</h2>
+        <div th:text="'Created: ' + ${#dates.format(post.createDate, 'dd-MMM-yyyy')} + ' by '">Created by</div>
+        <div><a th:text="${post.user.username}" th:href="@{'/blog/' + ${post.user.username}}">User</a></div>
+        <h4 style="color:black" th:text="${post.body}">Body</h4>
+        <!--Only show these buttons if the user is the owner of post-->
+        <div sec:authorize="isAuthenticated()" th:if="${username}">
+            <div class="row">
+                <a th:href="@{'/editPost/{id}'(id=${post.id})}" class="col-md-2">
+                    <button type="button" class="btn btn-primary btn-block" th:text="Edit">Edit</button>
+                </a>
+
+            </div>
+        </div>
+    </div>
+    <h4 style="color:black">Comments:</h4>
+    <!--Comments-->
+    <div class="well" th:each="comment : ${post.comments}">
+        <h3 style="color:black" th:text="${comment.body}">Body</h3>
+        <div th:text="'Created: ' + ${#dates.format(comment.createDate, 'dd-MMM-yyyy')} + ' by '">
+            Created by
+        </div>
+        <div><a th:text="${comment.user.username}" th:href="@{'/blog/' + ${comment.user.username}}">User</a>
+        </div>
+    </div>
+    <!--Leave a comment button-->
+    <!--Only if authenticated-->
+    <div sec:authorize="isAuthenticated()">
+        <div class="row">
+            <a style="color:black" th:href="@{'/commentPost/{id}'(id=${post.id})}" class="col-md-2">
+                <button type="button" class="btn btn-primary btn-block" th:text="Comment">Comment</button>
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

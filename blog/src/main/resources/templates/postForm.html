@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE">Home Page</title>
+
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.4/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"
+          rel="stylesheet" media="screen"/>
+
+    <link href="http://fonts.googleapis.com/css?family=Roboto+Condensed|Open+Sans:400,300,700|Yesteryear"
+          rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/style.css}" href="../css/style.css"/>
+</head>
+<body>
+
+<div id="menu-wrapper">
+    <div id="menu">
+        <!-- show My Blog only if user is authenticated -->
+        <!--		<ul class="nav navbar-nav" sec:authorize="hasRole('USER')">-->
+        <li class="active"><a th:href="@{/home}">Home</a></li>
+        <!--		</ul>-->
+        <!-- show new post only if user is authenticated -->
+        <!--		<ul class="nav navbar-nav" sec:authorize="hasRole('USER')">-->
+        <li class="active"><a th:href="@{/newPost}">New Post</a></li>
+        <!--		</ul>-->
+        <!-- show sign out only if user is authenticated -->
+        <!--		<ul class="nav navbar-nav" sec:authorize="isAuthenticated()">-->
+        <li class="active"><a th:href="@{/logout}">Sign Out</a></li>
+        </ul>
+    </div>
+    <!-- end #menu -->
+</div>
+<div class="container">
+    <div class="container">
+        <!--Show this info message only if posted successfully-->
+        <div class="alert alert-info" th:if="${successMessage}" th:utext="${successMessage}"></div>
+        <!--New Post Form-->
+        <div class="row" style="margin-top:20px">
+            <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+                <form autocomplete="off" action="#" th:action="@{/newPost}"
+                      th:object="${post}" method="post" class="form-horizontal"
+                      role="form">
+                    <h2 class="title" style="color:black" align="center">Write new post</h2>
+                    <div class="form-group">
+                        <label th:if="${#fields.hasErrors('title')}" th:errors="*{title}"
+                               class="alert alert-danger"></label>
+                        <input type="text" th:field="*{title}" placeholder="Title"
+                               class="form-control input-lg"/>
+                    </div>
+                    <div class="form-group">
+                        <label th:if="${#fields.hasErrors('body')}" th:errors="*{body}"
+                               class="alert alert-danger"></label>
+                        <textarea th:field="*{body}" placeholder="Body"
+                                  class="form-control input-lg"/>
+                    </div>
+                    <input type="hidden" th:field="*{user}"/>
+                    <input type="hidden" th:field="*{id}"/>
+
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary btn-block" value="Save"/>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <!--Delete Button-->
+        <!--Dont show delete button if the post is brand new-->
+        <div class="row" th:if="${post.id}">
+            <div class="col-md-6 col-md-offset-3">
+                <form action="#" th:action="@{'/post/{id}'(id=${post.id})}" th:method="delete"
+                      class="form-horizontal">
+                    <div class="form-group">
+                        <input type="hidden" name="_method" value="delete"/>
+                        <button type="submit" class="btn btn-danger btn-block" th:text="Delete">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
