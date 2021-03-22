@@ -2,7 +2,7 @@
 
 
 
-/*.idea
-.iws
+*.idea
+*.iws
 *.iml
-/.ipr
+*.ipr
