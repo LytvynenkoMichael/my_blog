@@ -1,5 +1,5 @@
 
-/blog/*.idea
+blog/*.idea
 .iws
-*.iml
+blog/*.iml
 /.ipr
