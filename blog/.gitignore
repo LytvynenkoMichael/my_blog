@@ -3,5 +3,5 @@
 ### IntelliJ IDEA ###
 .idea
 *.iws
-*.iml
+.iml
 *.ipr
